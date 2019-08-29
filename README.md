@@ -1,4 +1,4 @@
-<h3>Simulación bajo nivel de programación</h3>
+<h3>Simulación sistema de colas de bajo nivel</h3>
 
 <h5>Medidas de rendimiento a calcular:</h5>
 <p>* Utilización de los servidores.</p>
