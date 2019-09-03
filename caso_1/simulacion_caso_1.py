@@ -174,7 +174,6 @@ def partida_B():
         num_clientes_cola_A -= 1
         #Calculamos la demora
         demora = reloj - cola_A[0]
-        print('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',reloj,cola_A[0])
         #Actualizamos demora acumulada
         demora_acum_A += demora
         #Sumamos 1 al número de clientes que completaron demora
@@ -322,7 +321,6 @@ def partida_D1():
         demora = reloj - cola_C1[0]
         #Actualizamos demora acumulada
         demora_acum_C[0] += demora
-        print('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',reloj,cola_C1[0],demora_acum_C[0])
         #Agregamos uno al número de clientes que completaron su demora
         num_completo_demora_C[0] += 1
         #Calculamos la partida del cliente
@@ -361,7 +359,6 @@ def partida_D2():
         demora = reloj - cola_C2[0]
         #Actualizamos demora acumulada
         demora_acum_C[1] += demora
-        print('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',reloj,cola_C2[0],demora_acum_C[1])
 
         #Agregamos uno al número de clientes que completaron su demora
         num_completo_demora_C[1] += 1
