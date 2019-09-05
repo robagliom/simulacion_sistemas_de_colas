@@ -2,7 +2,7 @@
 import numpy as np
 import random
 
-#Simulación sistema de colas, ver bosquejo: imagen "caso_1.png"
+#Simulación sistema de colas, ver bosquejo: imagen "caso_2.png"
 
 
 #Inicializar variables
@@ -16,7 +16,7 @@ import random
 #INICIALIZAMOS VARIABLES
 fin_simulacion = 10000 #tiempo fin simulación
 #Política de atención en cola A: FIFO, LIFO, PRIORIDAD, RANDOM
-pol_atencion_cola_A = 'FIFO' #Hacer función que ordene la cola según este campo
+pol_atencion_cola_A = 'LIFO' #Hacer función que ordene la cola según este campo
 #Variables estadístias
 tiempo_medio_e_arribos_cola_A = 1
 tiempo_medio_servicio_B = 1/4 #para B1, B2, B3 y B4; los declaramos una vez porque todos tienen el mismo
@@ -173,7 +173,7 @@ def partida_B():
         #Restamos 1 al número de clientes en cola
         num_clientes_cola_A -= 1
         #Calculamos la demora
-        demora = reloj - cola_A[0]
+        demora = reloj - cola_A[-1] #calculo la demora del ultimo de la cola por ser LIFO la politica de atencion
         #Actualizamos demora acumulada
         demora_acum_A += demora
         #Sumamos 1 al número de clientes que completaron demora
@@ -185,8 +185,8 @@ def partida_B():
         area_estado_servidores_B[servidor] += (prox_partidas_B[servidor]-reloj)#(reloj - tiempo_ultimo_evento)
 
         #Si la cola no está vacía, mover cada cliente de la cola en una posición
-        #if num_clientes_cola_A != 0:
-        cola_A.pop(0)
+        #LIFO saco de la cola al ultimo
+        cola_A.pop()
 
     else:
         #print('cola vacía')

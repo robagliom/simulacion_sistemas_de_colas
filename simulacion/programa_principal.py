@@ -2,74 +2,66 @@
 import numpy as np
 import random
 
-#Simulación sistema de colas, ver bosquejo: imagen "caso_2.png"
+from variables_globales import *
+#Simulación sistema de colas, ver bosquejo: imagen "sistema_de_colas.png"
 
-
-#Inicializar variables
-#Generar primer arribo
-#Ver si hay servidor libre
-    #Si hay, se genera salida, se atiende, estado servidor pasa a ocupado
-        #Termina el servicio y se pone en la cola de menor gente
-            #ENTRA AL OTRO SISTEMA que es MM1
-    #Si no hay libre, poner en cola.
-
-#INICIALIZAMOS VARIABLES
+#Parámetros
 fin_simulacion = 10000 #tiempo fin simulación
-#Política de atención en cola A: FIFO, LIFO, PRIORIDAD, RANDOM
-pol_atencion_cola_A = 'FIFO' #Hacer función que ordene la cola según este campo
+
 #Variables estadístias
 tiempo_medio_e_arribos_cola_A = 1
 tiempo_medio_servicio_B = 1/4 #para B1, B2, B3 y B4; los declaramos una vez porque todos tienen el mismo
 tiempo_medio_servicio_D = 1/2 #para D1, D2, D3 y D4; los declaramos una vez porque todos tienen el mismo
 
-#Reloj del simulación
-reloj = 0
-#Lista de eventos
-prox_arribo_B = reloj + np.random.exponential(tiempo_medio_e_arribos_cola_A) #generamos primer arribo
-prox_partidas_B = [10.0**30,10.0**30,10.0**30,10.0**30]#[prox partida B1,prox partida B2,prox partida B3,prox partida B4]
-prox_arribo_D1 = 10.0**30 #Lo seteamos en infinito
-prox_partida_D1 = 10.0**30 #Lo seteamos en infinito
-prox_arribo_D2 = 10.0**30 #Lo seteamos en infinito
-prox_partida_D2 = 10.0**30 #Lo seteamos en infinito
+#Función que inicializa variables
+def inicializacion():
+    global demora_acum_A,demora_acum_C,tiempo_ultimo_evento,num_completo_demora_A,num_completo_demora_C,tiempos_arribo_cola_C1,cola_C1,tiempos_arribo_cola_C2,cola_C2,estado_servidores_B,num_clientes_cola_A,cola_A,estado_servidores_D,num_clientes_cola_C1,num_clientes_cola_C2,reloj,prox_arribo_B,prox_partidas_B,prox_arribo_D1,prox_partida_D1,prox_arribo_D2,prox_partida_D2,area_num_clientes_cola_A,area_num_clientes_cola_C1,area_num_clientes_cola_C2,area_estado_servidores_B,area_estado_servidores_D,tiempo_proximo_evento,tipo_proximo_evento,tipos_eventos
 
-#Estado del sistema
-#Estado servidores: 0:libre, 1:ocupado
-#Servidores B
-estado_servidores_B = np.zeros(4) #[estado B1,estado B2,estado B3,estado B4]
-num_clientes_cola_A = 0 #número de clientes en cola
-cola_A = [] #pol_atencion
-#Servidores D
-estado_servidores_D = np.zeros(2) #[estado D1,estado D2]
-num_clientes_cola_C1 = 0 #número de clientes en cola
-num_clientes_cola_C2 = 0 #número de clientes en cola
-tiempos_arribo_cola_C1 = [] #guardamos los tiempos para la cola C1
-cola_C1 = [] #FIFO
-tiempos_arribo_cola_C2 = [] #guardamos los tiempos para la cola C2
-cola_C2 = [] #FIFO
-tiempo_ultimo_evento = 0.0
+    reloj = 0
 
-#Contadores estadísticos
-#Número de clientes que completaron demoras en cola
-num_completo_demora_A = 0
-num_completo_demora_C = np.zeros(2) #[num cli completó demora C1,num cli completó demora C2]
-#Demoras acumuladas en cola
-demora_acum_A = 0
-demora_acum_C = np.zeros(2) #[demora acumulada C1,demora acumulada C2]
-#Q(t): área debajo de la función número de clientes en cola
-area_num_clientes_cola_A = 0
-area_num_clientes_cola_C1 = 0
-area_num_clientes_cola_C2 = 0
-#B(t): aŕea debajo de la función servidor ocupado: 1 si está ocupado, 0 si está desocupad
-area_estado_servidores_B = np.zeros(4) #[area B1,area B2,area B3,area B4]
-area_estado_servidores_D = np.zeros(2) #[area D1,area D2]
+    prox_arribo_B = reloj + np.random.exponential(tiempo_medio_e_arribos_cola_A) #generamos primer arribo
+    prox_partidas_B = [10.0**30,10.0**30,10.0**30,10.0**30]#[prox partida B1,prox partida B2,prox partida B3,prox partida B4]
+    prox_arribo_D1 = 10.0**30 #Lo seteamos en infinito
+    prox_partida_D1 = 10.0**30 #Lo seteamos en infinito
+    prox_arribo_D2 = 10.0**30 #Lo seteamos en infinito
+    prox_partida_D2 = 10.0**30 #Lo seteamos en infinito
 
-#Necesarias para avanzar en el tiempo
-tiempo_proximo_evento = 0.0
-tipo_proximo_evento = ""
-#Ai: arribo i, i nombre y número servidor
-#Pi: partida i, i nombre y número servidor
-tipos_eventos = ['AB','PB','AD1','AD2','PD1','PD2']
-#tipos_eventos = ['AB','PB1','PB2','PB3','PB4','AD1','AD2','PD1','PD2']
+    estado_servidores_B = np.zeros(4) #[estado B1,estado B2,estado B3,estado B4]
+    num_clientes_cola_A = 0 #número de clientes en cola
+    cola_A = [] #pol_atencion
+    #Servidores D
+    estado_servidores_D = np.zeros(2) #[estado D1,estado D2]
+    num_clientes_cola_C1 = 0 #número de clientes en cola
+    num_clientes_cola_C2 = 0 #número de clientes en cola
+    tiempos_arribo_cola_C1 = [] #guardamos los tiempos para la cola C1
+    cola_C1 = [] #FIFO
+    tiempos_arribo_cola_C2 = [] #guardamos los tiempos para la cola C2
+    cola_C2 = [] #FIFO
+    tiempo_ultimo_evento = 0.0
+
+    #Contadores estadísticos
+    #Número de clientes que completaron demoras en cola
+    num_completo_demora_A = 0
+    num_completo_demora_C = np.zeros(2) #[num cli completó demora C1,num cli completó demora C2]
+    #Demoras acumuladas en cola
+    demora_acum_A = 0
+    demora_acum_C = np.zeros(2) #[demora acumulada C1,demora acumulada C2]
+    #Q(t): área debajo de la función número de clientes en cola
+    area_num_clientes_cola_A = 0
+    area_num_clientes_cola_C1 = 0
+    area_num_clientes_cola_C2 = 0
+    #B(t): aŕea debajo de la función servidor ocupado: 1 si está ocupado, 0 si está desocupad
+    area_estado_servidores_B = np.zeros(4) #[area B1,area B2,area B3,area B4]
+    area_estado_servidores_D = np.zeros(2) #[area D1,area D2]
+
+    #Necesarias para avanzar en el tiempo
+    tiempo_proximo_evento = 0.0
+    tipo_proximo_evento = ""
+    #Ai: arribo i, i nombre y número servidor
+    #Pi: partida i, i nombre y número servidor
+    tipos_eventos = ['AB','PB','AD1','AD2','PD1','PD2']
+
+    return
 
 #Función que determina el tiempo del próximo evento y el tipo
 def tiempos():
@@ -173,7 +165,7 @@ def partida_B():
         #Restamos 1 al número de clientes en cola
         num_clientes_cola_A -= 1
         #Calculamos la demora
-        demora = reloj - cola_A[-1] #calculo la demora del ultimo de la cola por ser LIFO la politica de atencion
+        demora = reloj - cola_A[0]
         #Actualizamos demora acumulada
         demora_acum_A += demora
         #Sumamos 1 al número de clientes que completaron demora
@@ -185,8 +177,8 @@ def partida_B():
         area_estado_servidores_B[servidor] += (prox_partidas_B[servidor]-reloj)#(reloj - tiempo_ultimo_evento)
 
         #Si la cola no está vacía, mover cada cliente de la cola en una posición
-        #LIFO saco de la cola al ultimo
-        cola_A.pop()
+        #if num_clientes_cola_A != 0:
+        cola_A.pop(0)
 
     else:
         #print('cola vacía')
@@ -447,8 +439,11 @@ def informes():
 
     return
 
-def programa_principal():
+#pol_atencion_cola_A: Política de atención en cola A: FIFO, LIFO, PRIORIDAD, RANDOM
+def programa_principal(pol_atencion_cola_A):
     global reloj, fin_simulacion,tipo_proximo_evento
+
+    inicializacion()
 
     while reloj <= fin_simulacion:
         tiempos()
@@ -471,4 +466,5 @@ def programa_principal():
 
     return
 
-programa_principal()
+if __name__ == '__main__':
+    programa_principal()
