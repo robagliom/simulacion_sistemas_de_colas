@@ -70,7 +70,7 @@ tipos_eventos = ['AB','PB','AD','PD']
 def tiempos():
     global reloj, prox_arribo_B, prox_partidas_B, prox_arribo_D, prox_partidas_D, tiempo_proximo_evento,tipo_proximo_evento,tiempo_ultimo_evento
     #Ponemos en infinito el tiempo del próximo evento
-    #Vamos a buscar el menor tiempo entre: prox_arribo_B, prox_partidas_B(1,2,3 y 4), prox_arribo_D1, prox_arribo_D2, prox_partida_D1, prox_partida_D2
+    #Vamos a buscar el menor tiempo entre: prox_arribo_B, prox_partidas_B(1,2,3 y 4), prox_arribo_D, prox_partidas_D(1,2)
     tiempo_proximo_evento = 10.0**30
     print('-------> prox_arribo_B',prox_arribo_B)
     print('-------> prox_partidas_B',prox_partidas_B)
@@ -84,13 +84,14 @@ def tiempos():
         if e <= tiempo_proximo_evento:
             tiempo_proximo_evento = e
             tipo_proximo_evento = 'PB'
+    if prox_arribo_D <= tiempo_proximo_evento:
+        tiempo_proximo_evento = prox_arribo_D
+        tipo_proximo_evento = 'AD'
     for i in prox_partidas_D:
         if i <= tiempo_proximo_evento:
             tiempo_proximo_evento = i
             tipo_proximo_evento = 'PD'
-    if prox_arribo_D <= tiempo_proximo_evento:
-        tiempo_proximo_evento = prox_arribo_D
-        tipo_proximo_evento = 'AD'
+
 
 
 
@@ -142,7 +143,7 @@ def arribo_B():
     return
 
 def partida_B():
-    global reloj,prox_partidas_B, num_clientes_cola_A,tiempo_ultimo_evento,area_num_clientes_cola_A,num_completo_demora_A,tiempo_medio_servicio_B,demora_acum_A,cola_A,estado_servidores_B,num_clientes_cola_C1,num_clientes_cola_C2,tiempos_arribo_cola_C1,tiempos_arribo_cola_C2,prox_arribo_D1,prox_arribo_D2,estado_servidores_D
+    global reloj,prox_partidas_B, num_clientes_cola_A,tiempo_ultimo_evento,area_num_clientes_cola_A,num_completo_demora_A,tiempo_medio_servicio_B,demora_acum_A,cola_A,estado_servidores_B,num_clientes_cola_C,tiempos_arribo_cola_C,prox_arribo_D, estado_servidores_D
     print('partida B',reloj)
     #Identificamos servidor que se va a desocupar
     servidor = 0
@@ -190,36 +191,20 @@ def partida_B():
 
     #El cliente que se va pasa a la siguiente cola
     tiempos_arribo_cola_C.append(reloj)
-    #vemos si la cola esta vacía, en ese caso vemos si los dos servidores estan libres y elegimos a uno random,
-    #sino asignamos el servidor que está libre
-    if num_clientes_cola_C == 0
-        #la cola esta vacia
-        #vemos si los dos servidores estan libres
-        if estado_servidores_D[0] == 0 and estado_servidores_D[1] == 0:
-            opciones = [1,2] #Opción 1: servidor D1, opcion 2: servidor D2
-            cola = random.choice(opciones)
-            if cola == 1:
-                prox_arribo_D1 = tiempos_arribo_cola_C([0])
-            else:
-                prox_arribo_D2 = tiempos_arribo_cola_C[0]
-        #Vemos si el servidor D1 está desocupado
-        elif estado_servidores_D[0] == 0:
-            prox_arribo_D1 = tiempos_arribo_cola_C[0]
-        #Vemos si el servidor D2 está desocupado
-        elif estado_servidores_D[1] == 0:
-            prox_arribo_D2 = tiempos_arribo_cola_C[0]
-
+    prox_arribo_D = tiempos_arribo_cola_C[0]
 
     return
 
 def arribo_D():
     global reloj,prox_arribo_D,tiempos_arribo_cola_C,estado_servidores_D,tiempo_medio_servicio_D,prox_partidas_D,num_completo_demora_C,area_estado_servidores_D,num_clientes_cola_C,cola_C,area_num_clientes_cola_C, demora_acum_C, tiempo_ultimo_evento
     print('arribo D',reloj)
+    #eliminamos el arribo ya usado
+    tiempos_arribo_cola_C.pop(0)
     #Un arribo genera un arribo
     if len(tiempos_arribo_cola_C) > 0:
         prox_arribo_D = reloj + tiempos_arribo_cola_C[0]
         #Eliminamos el arribo ya usado
-        tiempos_arribo_cola_C.pop(0)
+        #tiempos_arribo_cola_C.pop(0) #lo tengo que borrar apenas ocurre no si hay mas, ademas me da mal el len()
     else:
         prox_arribo_D = 10.0**30
 
@@ -260,7 +245,7 @@ def arribo_D():
     else:
         #Todos los servidores están ocupados, se agrega a la cola
         num_clientes_cola_C += 1 #sumamos 1 al número de clientes en cola C
-        cola_C.append(prox_arribo_D) #guardamos el tiempo de arribo del cliente
+        cola_C.append(reloj) #guardamos el tiempo de arribo del cliente
         #Actualizamos área debajo de la función número de clientes en cola
         area_num_clientes_cola_C += num_clientes_cola_C*(reloj-tiempo_ultimo_evento)
     return
@@ -302,7 +287,7 @@ def partida_D():
         area_estado_servidores_D[servidor] += (prox_partidas_D[servidor]-reloj)#(reloj-tiempo_ultimo_evento)
 
         #Si la cola no está vacía, mover cada cliente de la cola en una posición
-        #if num_clientes_cola_C1 != 0:
+
         cola_C.pop(0)
 
     else:
@@ -333,7 +318,7 @@ def informes():
     except ZeroDivisionError:
         print('No hay demora acumulada en cola A, ningún cliente completó demora')
     try:
-        print('Demora promedio en cola C:', demora_acum_C/num_completo_demora_C[0])
+        print('Demora promedio en cola C:', demora_acum_C/num_completo_demora_C)
     except ZeroDivisionError:
         print('No hay demora acumulada en cola C, ningún cliente completó demora')
 
@@ -383,14 +368,10 @@ def programa_principal():
             arribo_B()
         elif tipo_proximo_evento == 'PB':
             partida_B()
-        elif tipo_proximo_evento == 'AD1':
-            arribo_D1()
-        elif tipo_proximo_evento == 'AD2':
-            arribo_D2()
-        elif tipo_proximo_evento == 'PD1':
-            partida_D1()
-        elif tipo_proximo_evento == 'PD2':
-            partida_D2()
+        elif tipo_proximo_evento == 'AD':
+            arribo_D()
+        elif tipo_proximo_evento == 'PD':
+            partida_D()
         else:
             print('Error, no hay ningún evento de ese tipo')
 
