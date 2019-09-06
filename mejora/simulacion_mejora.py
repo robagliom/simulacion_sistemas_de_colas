@@ -9,8 +9,8 @@ import random
 #Generar primer arribo
 #Ver si hay servidor libre
     #Si hay, se genera salida, se atiende, estado servidor pasa a ocupado
-        #Termina el servicio y se pone en la cola de menor gente
-            #ENTRA AL OTRO SISTEMA que es MM1
+        #Termina el servicio y se pone en la cola c
+            #ENTRA AL OTRO SISTEMA
     #Si no hay libre, poner en cola.
 
 #INICIALIZAMOS VARIABLES
@@ -20,7 +20,7 @@ pol_atencion_cola_A = 'FIFO' #Hacer función que ordene la cola según este camp
 #Variables estadístias
 tiempo_medio_e_arribos_cola_A = 1
 tiempo_medio_servicio_B = 1/4 #para B1, B2, B3 y B4; los declaramos una vez porque todos tienen el mismo
-tiempo_medio_servicio_D = 1/2 #para D1, D2, D3 y D4; los declaramos una vez porque todos tienen el mismo
+tiempo_medio_servicio_D = 1/2 #para D1, D2; los declaramos una vez porque todos tienen el mismo
 
 #Reloj del simulación
 reloj = 0
@@ -92,10 +92,6 @@ def tiempos():
             tiempo_proximo_evento = i
             tipo_proximo_evento = 'PD'
 
-
-
-
-
     #Cambiamos reloj al próximo tiempo
     reloj = tiempo_proximo_evento
     print('** tiempo_proximo_evento',tiempo_proximo_evento,'tipo_proximo_evento',tipo_proximo_evento)
@@ -107,7 +103,7 @@ def arribo_B():
     print('arribo B',reloj)
     #Un arribo genera un arribo
     prox_arribo_B = reloj + np.random.exponential(tiempo_medio_e_arribos_cola_A) #generamos próximo arribo
-    #Veo si hay algún servidor B libre
+    #Vemos si hay algún servidor B libre
     servidores_libres = []
     for e in range(len(estado_servidores_B)):
         #Vemos qué servidores están libres
@@ -147,11 +143,11 @@ def partida_B():
     print('partida B',reloj)
     #Identificamos servidor que se va a desocupar
     servidor = 0
-    #Recorro arreglo que tiene las próximas partidas de B
+    #Recorremos arreglo que tiene las próximas partidas de B
     for i in range(len(prox_partidas_B)):
-        #Comparo el tiempo actual con cada partida
+        #Comparamos el tiempo actual con cada partida
         if prox_partidas_B[i] == reloj:
-            #Si el tiempo actual es igual al tiempo "i" del arreglo guardo la posición para identificar al servidor
+            #Si el tiempo actual es igual al tiempo "i" del arreglo guardamos la posición para identificar al servidor
             servidor = i
     #Vemos si hay clientes en cola
     if num_clientes_cola_A > 0:
@@ -177,7 +173,6 @@ def partida_B():
         area_estado_servidores_B[servidor] += (prox_partidas_B[servidor]-reloj)#(reloj - tiempo_ultimo_evento)
 
         #Si la cola no está vacía, mover cada cliente de la cola en una posición
-        #if num_clientes_cola_A != 0:
         cola_A.pop(0)
 
     else:
@@ -258,11 +253,11 @@ def partida_D():
     print('partida D',reloj)
     #Identificamos servidor que se va a desocupar
     servidor = 0
-    #Recorro arreglo que tiene las próximas partidas de D
+    #Recorremos arreglo que tiene las próximas partidas de D
     for i in range(len(prox_partidas_D)):
-        #Comparo el tiempo actual con cada partida
+        #Comparamos el tiempo actual con cada partida
         if prox_partidas_D[i] == reloj:
-            #Si el tiempo actual es igual al tiempo "i" del arreglo guardo la posición para identificar al servidor
+            #Si el tiempo actual es igual al tiempo "i" del arreglo guardamos la posición para identificar al servidor
             servidor = i
 
     #Vemos si la cola está vacía
