@@ -2,7 +2,7 @@
 import numpy as np
 import random
 
-#Simulación sistema de colas, ver bosquejo: imagen "caso_1.png"
+#Simulación sistema de colas, ver bosquejo: imagen "caso_4.png"
 
 
 #Inicializar variables
