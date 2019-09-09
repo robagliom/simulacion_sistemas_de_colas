@@ -16,7 +16,7 @@ import random
 #INICIALIZAMOS VARIABLES
 fin_simulacion = 10000 #tiempo fin simulación
 #Política de atención en cola A: FIFO, LIFO, PRIORIDAD, RANDOM
-pol_atencion_cola_A = 'FIFO' #Hacer función que ordene la cola según este campo
+pol_atencion_cola_A = 'LIFO' #Hacer función que ordene la cola según este campo
 #Variables estadístias
 tiempo_medio_e_arribos_cola_A = 1
 tiempo_medio_servicio_B = 1/4 #para B1, B2, B3 y B4; los declaramos una vez porque todos tienen el mismo
