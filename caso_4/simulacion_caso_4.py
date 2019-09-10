@@ -155,13 +155,14 @@ def arribo_B():
         tiempo_ultimo_evento = reloj
 
     else:
+        tiempo_ultimo_evento = reloj
         #Todos los servidores están ocupados, se agrega a la cola
         num_clientes_cola_A += 1 #sumamos 1 al número de clientes en cola A
         #vemos si tiene prioridad o no
         if prioridad == 1:
-            cola_A.insert(0,prox_arribo_B) #como tiene prioridad lo agregamos al principio de la cola
+            cola_A.insert(0,tiempo_ultimo_evento) #como tiene prioridad lo agregamos al principio de la cola
         else:
-            cola_A.append(prox_arribo_B) #guardamos el tiempo de arribo del cliente
+            cola_A.append(tiempo_ultimo_evento) #guardamos el tiempo de arribo del cliente
         #Actualizamos área debajo de la función número de clientes en cola
         area_num_clientes_cola_A += num_clientes_cola_A*(reloj-tiempo_ultimo_evento)
     return

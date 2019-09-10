@@ -131,9 +131,10 @@ def arribo_B():
         tiempo_ultimo_evento = reloj
 
     else:
+        tiempo_ultimo_evento = reloj
         #Todos los servidores están ocupados, se agrega a la cola
         num_clientes_cola_A += 1 #sumamos 1 al número de clientes en cola A
-        cola_A.append(prox_arribo_B) #guardamos el tiempo de arribo del cliente
+        cola_A.append(tiempo_ultimo_evento) #guardamos el tiempo de arribo del cliente
         #Actualizamos área debajo de la función número de clientes en cola
         area_num_clientes_cola_A += num_clientes_cola_A*(reloj-tiempo_ultimo_evento)
     return
@@ -238,15 +239,13 @@ def arribo_D():
         #Guardamos el tiempo del último evento
         tiempo_ultimo_evento = reloj
     else:
+        tiempo_ultimo_evento = reloj
         #Todos los servidores están ocupados, se agrega a la cola
         num_clientes_cola_C += 1 #sumamos 1 al número de clientes en cola C
-        cola_C.append(reloj) #guardamos el tiempo de arribo del cliente
+        cola_C.append(tiempo_ultimo_evento) #guardamos el tiempo de arribo del cliente
         #Actualizamos área debajo de la función número de clientes en cola
         area_num_clientes_cola_C += num_clientes_cola_C*(reloj-tiempo_ultimo_evento)
     return
-
-
-
 
 def partida_D():
     global reloj,cola_C,estado_servidores_D,num_clientes_cola_C,tiempos_arribo_cola_C,tiempo_ultimo_evento,num_completo_demora_C,demora_acum_C,area_num_clientes_cola_C,area_estado_servidores_D,prox_partidas_D
