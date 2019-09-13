@@ -14,9 +14,6 @@ import random
     #Si no hay libre, poner en cola.
 
 #INICIALIZAMOS VARIABLES
-fin_simulacion = 10000 #tiempo fin simulación
-#Política de atención en cola A: FIFO, LIFO, PRIORIDAD, RANDOM
-pol_atencion_cola_A = 'FIFO' #Hacer función que ordene la cola según este campo
 #Variables estadístias
 tiempo_medio_e_arribos_cola_A = 1
 tiempo_medio_servicio_B = 1/4 #para B1, B2, B3 y B4; los declaramos una vez porque todos tienen el mismo
@@ -66,16 +63,47 @@ tipo_proximo_evento = ""
 tipos_eventos = ['AB','PB','AD','PD']
 #tipos_eventos = ['AB','PB1','PB2','PB3','PB4','AD1','AD2','PD1','PD2']
 
+def inicializacion():
+    global reloj,prox_arribo_B,prox_partidas_B,prox_arribo_D,prox_partidas_D,estado_servidores_B,num_clientes_cola_A,cola_A,estado_servidores_D,num_clientes_cola_C,tiempos_arribo_cola_C,cola_C,tiempo_ultimo_evento,num_completo_demora_A,num_completo_demora_C,demora_acum_A,demora_acum_C,area_num_clientes_cola_A,area_num_clientes_cola_C,area_estado_servidores_B,area_estado_servidores_D,tiempo_proximo_evento,tipo_proximo_evento
+
+    reloj = 0
+    prox_arribo_B = reloj + np.random.exponential(tiempo_medio_e_arribos_cola_A) #generamos primer arribo
+    prox_partidas_B = [10.0**30,10.0**30,10.0**30,10.0**30]#[prox partida B1,prox partida B2,prox partida B3,prox partida B4]
+    prox_arribo_D = 10.0**30 #Lo seteamos en infinito
+    prox_partidas_D = [10.0**30,10.0**30] #[prox partida D1,prox partida D2]
+    estado_servidores_B = np.zeros(4) #[estado B1,estado B2,estado B3,estado B4]
+    num_clientes_cola_A = 0 #número de clientes en cola
+    cola_A = [] #pol_atencion
+    estado_servidores_D = np.zeros(2) #[estado D1,estado D2]
+    num_clientes_cola_C = 0 #número de clientes en cola
+    tiempos_arribo_cola_C = []  #guardamos los tiempos para la cola C
+    cola_C = [] #FIFO
+    tiempo_ultimo_evento = 0.0
+    num_completo_demora_A = 0
+    num_completo_demora_C = 0 #num cli completó demora C
+    #Demoras acumuladas en cola
+    demora_acum_A = 0
+    demora_acum_C = 0 #demora acumulada C
+    area_num_clientes_cola_A = 0
+    area_num_clientes_cola_C = 0
+    area_estado_servidores_B = np.zeros(4) #[area B1,area B2,area B3,area B4]
+    area_estado_servidores_D = np.zeros(2) #[area D1,area D2]
+    #Necesarias para avanzar en el tiempo
+    tiempo_proximo_evento = 0.0
+    tipo_proximo_evento = ""
+
+    return
+
 #Función que determina el tiempo del próximo evento y el tipo
 def tiempos():
     global reloj, prox_arribo_B, prox_partidas_B, prox_arribo_D, prox_partidas_D, tiempo_proximo_evento,tipo_proximo_evento,tiempo_ultimo_evento
     #Ponemos en infinito el tiempo del próximo evento
     #Vamos a buscar el menor tiempo entre: prox_arribo_B, prox_partidas_B(1,2,3 y 4), prox_arribo_D, prox_partidas_D(1,2)
     tiempo_proximo_evento = 10.0**30
-    print('-------> prox_arribo_B',prox_arribo_B)
-    print('-------> prox_partidas_B',prox_partidas_B)
-    print('-------> prox_arribo_D',prox_arribo_D)
-    print('-------> prox_partidas_D',prox_partidas_D)
+    #print('-------> prox_arribo_B',prox_arribo_B)
+    #print('-------> prox_partidas_B',prox_partidas_B)
+    #print('-------> prox_arribo_D',prox_arribo_D)
+    #print('-------> prox_partidas_D',prox_partidas_D)
 
     if prox_arribo_B <= tiempo_proximo_evento:
         tiempo_proximo_evento = prox_arribo_B
@@ -94,13 +122,13 @@ def tiempos():
 
     #Cambiamos reloj al próximo tiempo
     reloj = tiempo_proximo_evento
-    print('** tiempo_proximo_evento',tiempo_proximo_evento,'tipo_proximo_evento',tipo_proximo_evento)
+    #print('** tiempo_proximo_evento',tiempo_proximo_evento,'tipo_proximo_evento',tipo_proximo_evento)
     return
 
 #Funciones para cada tipo de evento
 def arribo_B():
     global reloj,prox_arribo_B,tiempo_medio_e_arribos_cola_A,estado_servidores_B,tiempo_medio_servicio_B,prox_partidas_B,num_completo_demora_A,area_estado_servidores_B,num_clientes_cola_A,cola_A,area_num_clientes_cola_A,tiempo_ultimo_evento
-    print('arribo B',reloj)
+    #print('arribo B',reloj)
     #Un arribo genera un arribo
     prox_arribo_B = reloj + np.random.exponential(tiempo_medio_e_arribos_cola_A) #generamos próximo arribo
     #Vemos si hay algún servidor B libre
@@ -131,17 +159,16 @@ def arribo_B():
         tiempo_ultimo_evento = reloj
 
     else:
-        tiempo_ultimo_evento = reloj
         #Todos los servidores están ocupados, se agrega a la cola
         num_clientes_cola_A += 1 #sumamos 1 al número de clientes en cola A
-        cola_A.append(tiempo_ultimo_evento) #guardamos el tiempo de arribo del cliente
+        cola_A.append(prox_arribo_B) #guardamos el tiempo de arribo del cliente
         #Actualizamos área debajo de la función número de clientes en cola
         area_num_clientes_cola_A += num_clientes_cola_A*(reloj-tiempo_ultimo_evento)
     return
 
 def partida_B():
     global reloj,prox_partidas_B, num_clientes_cola_A,tiempo_ultimo_evento,area_num_clientes_cola_A,num_completo_demora_A,tiempo_medio_servicio_B,demora_acum_A,cola_A,estado_servidores_B,num_clientes_cola_C,tiempos_arribo_cola_C,prox_arribo_D, estado_servidores_D
-    print('partida B',reloj)
+    #print('partida B',reloj)
     #Identificamos servidor que se va a desocupar
     servidor = 0
     #Recorremos arreglo que tiene las próximas partidas de B
@@ -193,7 +220,7 @@ def partida_B():
 
 def arribo_D():
     global reloj,prox_arribo_D,tiempos_arribo_cola_C,estado_servidores_D,tiempo_medio_servicio_D,prox_partidas_D,num_completo_demora_C,area_estado_servidores_D,num_clientes_cola_C,cola_C,area_num_clientes_cola_C, demora_acum_C, tiempo_ultimo_evento
-    print('arribo D',reloj)
+    #print('arribo D',reloj)
     #eliminamos el arribo ya usado
     tiempos_arribo_cola_C.pop(0)
     #Un arribo genera un arribo
@@ -239,17 +266,19 @@ def arribo_D():
         #Guardamos el tiempo del último evento
         tiempo_ultimo_evento = reloj
     else:
-        tiempo_ultimo_evento = reloj
         #Todos los servidores están ocupados, se agrega a la cola
         num_clientes_cola_C += 1 #sumamos 1 al número de clientes en cola C
-        cola_C.append(tiempo_ultimo_evento) #guardamos el tiempo de arribo del cliente
+        cola_C.append(reloj) #guardamos el tiempo de arribo del cliente
         #Actualizamos área debajo de la función número de clientes en cola
         area_num_clientes_cola_C += num_clientes_cola_C*(reloj-tiempo_ultimo_evento)
     return
 
+
+
+
 def partida_D():
     global reloj,cola_C,estado_servidores_D,num_clientes_cola_C,tiempos_arribo_cola_C,tiempo_ultimo_evento,num_completo_demora_C,demora_acum_C,area_num_clientes_cola_C,area_estado_servidores_D,prox_partidas_D
-    print('partida D',reloj)
+    #print('partida D',reloj)
     #Identificamos servidor que se va a desocupar
     servidor = 0
     #Recorremos arreglo que tiene las próximas partidas de D
@@ -296,65 +325,79 @@ def partida_D():
 
 def informes():
     global num_clientes_cola_A,num_clientes_cola_C,num_completo_demora_A,num_completo_demora_C,demora_acum_A,demora_acum_C,tiempo_ultimo_evento,area_num_clientes_cola_A,area_num_clientes_cola_C,area_estado_servidores_B,area_estado_servidores_D
-    print('Informes')
-
-    #print('Número clientes en cola A:', num_clientes_cola_A)
-    #print('Número clientes en cola C:', num_clientes_cola_C)
-
-    print('Tiempo de simulación:',reloj)
-    print('Tiempo último evento:', tiempo_ultimo_evento)
-
-    print('Número clientes que completaron demora en cola A:',num_completo_demora_A)
-    print('Número de clientes que completaron demora en cola C',num_completo_demora_C)
-
-    try:
-        print('Demora promedio en cola A:',abs(demora_acum_A/num_completo_demora_A))
-    except ZeroDivisionError:
-        print('No hay demora acumulada en cola A, ningún cliente completó demora')
-    try:
-        print('Demora promedio en cola C:', demora_acum_C/num_completo_demora_C)
-    except ZeroDivisionError:
-        print('No hay demora acumulada en cola C, ningún cliente completó demora')
-
-    try:
-        print('Q(t): número promedio de clientes en cola A:',area_num_clientes_cola_A/tiempo_ultimo_evento)
-    except ZeroDivisionError:
-        pass
-    try:
-        print('Q(t): número promedio de clientes en cola C:',area_num_clientes_cola_C/tiempo_ultimo_evento)
-    except ZeroDivisionError:
-        pass
+    informes = {
+                'demora_colas':{},
+                'numero_clientes':{},
+                'utilizacion_servidores':{},
+                }
 
 
     try:
-        print('B(t): utilización promedio del servidor B1:',area_estado_servidores_B[0]/tiempo_ultimo_evento)
+        demora_promedio_cola_A = abs(demora_acum_A/num_completo_demora_A)
+        informes['demora_colas']['A'] = demora_promedio_cola_A
+        #print('Demora promedio en cola A:',demora_promedio_cola_A)
     except ZeroDivisionError:
-        pass
+        demora_promedio_cola_A = 0
     try:
-        print('B(t): utilización promedio del servidor B2:',area_estado_servidores_B[1]/tiempo_ultimo_evento)
+        demora_promedio_cola_C = demora_acum_C/num_completo_demora_C
+        informes['demora_colas']['C1'] = demora_promedio_cola_C
     except ZeroDivisionError:
-        pass
-    try:
-        print('B(t): utilización promedio del servidor B3:',area_estado_servidores_B[2]/tiempo_ultimo_evento)
-    except ZeroDivisionError:
-        pass
-    try:
-        print('B(t): utilización promedio del servidor B4:',area_estado_servidores_B[3]/tiempo_ultimo_evento)
-    except ZeroDivisionError:
-        pass
-    try:
-        print('B(t): utilización promedio del servidor D1:',area_estado_servidores_D[0]/tiempo_ultimo_evento)
-    except ZeroDivisionError:
-        pass
-    try:
-        print('B(t): utilización promedio del servidor D2:',area_estado_servidores_D[1]/tiempo_ultimo_evento)
-    except ZeroDivisionError:
-        pass
+        demora_promedio_cola_C = 0
 
-    return
+    try:
+        nro_prom_clientes_cola_A = area_num_clientes_cola_A/tiempo_ultimo_evento
+        informes['numero_clientes']['A'] = nro_prom_clientes_cola_A
+        #print('Q(t): número promedio de clientes en cola A:', nro_prom_clientes_cola_A)
+    except ZeroDivisionError:
+        nro_prom_clientes_cola_A = 0
+    try:
+        nro_prom_clientes_cola_C = area_num_clientes_cola_C/tiempo_ultimo_evento
+        informes['numero_clientes']['C1'] = nro_prom_clientes_cola_C
+    except ZeroDivisionError:
+        nro_prom_clientes_cola_C = 0
+    try:
+        utilizacion_prom_B1 = area_estado_servidores_B[0]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['B1'] = utilizacion_prom_B1
+        #print('B(t): utilización promedio del servidor B1:',utilizacion_prom_B1)
+    except ZeroDivisionError:
+        utilizacion_prom_B1 = 0
+    try:
+        utilizacion_prom_B2 = area_estado_servidores_B[1]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['B2'] =utilizacion_prom_B2
+        #print('B(t): utilización promedio del servidor B2:',utilizacion_prom_B2)
+    except ZeroDivisionError:
+        utilizacion_prom_B2 = 0
+    try:
+        utilizacion_prom_B3 = area_estado_servidores_B[2]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['B3'] = utilizacion_prom_B3
+        #print('B(t): utilización promedio del servidor B3:',utilizacion_prom_B3)
+    except ZeroDivisionError:
+        utilizacion_prom_B3 = 0
+    try:
+        utilizacion_prom_B4 = area_estado_servidores_B[3]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['B4'] = utilizacion_prom_B4
+        #print('B(t): utilización promedio del servidor B4:',utilizacion_prom_B4)
+    except ZeroDivisionError:
+        utilizacion_prom_B4 = 0
+    try:
+        utilizacion_prom_D1 = area_estado_servidores_D[0]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['D1'] = utilizacion_prom_D1
+        #print('B(t): utilización promedio del servidor D1:',utilizacion_prom_D1)
+    except ZeroDivisionError:
+        utilizacion_prom_D1 = 0
+    try:
+        utilizacion_prom_D2 = area_estado_servidores_D[1]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['D2'] = utilizacion_prom_D2
+        #print('B(t): utilización promedio del servidor D2:',utilizacion_prom_D2)
+    except ZeroDivisionError:
+        utilizacion_prom_D2 = 0
 
-def programa_principal():
-    global reloj, fin_simulacion,tipo_proximo_evento
+    return informes
+
+def programa_principal_MEJORA(fin_simulacion):
+    global reloj,tipo_proximo_evento
+
+    inicializacion()
 
     while reloj <= fin_simulacion:
         tiempos()
@@ -369,8 +412,4 @@ def programa_principal():
         else:
             print('Error, no hay ningún evento de ese tipo')
 
-    informes()
-
-    return
-
-programa_principal()
+    return informes()

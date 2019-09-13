@@ -14,9 +14,6 @@ import random
     #Si no hay libre, poner en cola.
 
 #INICIALIZAMOS VARIABLES
-fin_simulacion = 1000 #tiempo fin simulación
-#Política de atención en cola A: FIFO, LIFO, PRIORIDAD, RANDOM
-pol_atencion_cola_A = 'FIFO' #Hacer función que ordene la cola según este campo
 #Variables estadístias
 tiempo_medio_e_arribos_cola_A = 1
 tiempo_medio_servicio_B = 1/4 #para B1, B2, B3 y B4; los declaramos una vez porque todos tienen el mismo
@@ -436,21 +433,29 @@ def informes():
     #print('Número clientes que completaron demora en cola A:',num_completo_demora_A)
     #print('Número de clientes que completaron demora en cola C1',num_completo_demora_C[0])
     #print('Número de clientes que completaron demora en cola C2',num_completo_demora_C[1])
+    informes = {
+                'demora_colas':{},
+                'numero_clientes':{},
+                'utilizacion_servidores':{},
+                }
 
     try:
         demora_promedio_cola_A = abs(demora_acum_A/num_completo_demora_A)
+        informes['demora_colas']['A'] = demora_promedio_cola_A
         #print('Demora promedio en cola A:',demora_promedio_cola_A)
     except ZeroDivisionError:
         demora_promedio_cola_A = 0
         #print('No hay demora acumulada en cola A, ningún cliente completó demora')
     try:
         demora_promedio_cola_C1 = demora_acum_C[0]/num_completo_demora_C[0]
+        informes['demora_colas']['C1'] = demora_promedio_cola_C1
         #print('Demora promedio en cola C1:', demora_promedio_cola_C1)
     except ZeroDivisionError:
         demora_promedio_cola_C1 = 0
         #print('No hay demora acumulada en cola C1, ningún cliente completó demora')
     try:
         demora_promedio_cola_C2 = demora_acum_C[1]/num_completo_demora_C[1]
+        informes['demora_colas']['C2'] = demora_promedio_cola_C2
         #print('Demora promedio en cola C2:', demora_promedio_cola_C2)
     except ZeroDivisionError:
         demora_promedio_cola_C2 = 0
@@ -458,55 +463,64 @@ def informes():
 
     try:
         nro_prom_clientes_cola_A = area_num_clientes_cola_A/tiempo_ultimo_evento
+        informes['numero_clientes']['A'] = nro_prom_clientes_cola_A
         #print('Q(t): número promedio de clientes en cola A:', nro_prom_clientes_cola_A)
     except ZeroDivisionError:
         nro_prom_clientes_cola_A = 0
     try:
         nro_prom_clientes_cola_C1 = area_num_clientes_cola_C1/tiempo_ultimo_evento
+        informes['numero_clientes']['C1'] = nro_prom_clientes_cola_C1
         #print('Q(t): número promedio de clientes en cola C1:',nro_prom_clientes_cola_C1)
     except ZeroDivisionError:
         nro_prom_clientes_cola_C1 = 0
     try:
         nro_prom_clientes_cola_C2 = area_num_clientes_cola_C2/tiempo_ultimo_evento
+        informes['numero_clientes']['C2'] = nro_prom_clientes_cola_C2
         #print('Q(t): número promedio de clientes en cola C2:',nro_prom_clientes_cola_C2)
     except ZeroDivisionError:
         nro_prom_clientes_cola_C2 = 0
 
     try:
         utilizacion_prom_B1 = area_estado_servidores_B[0]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['B1'] = utilizacion_prom_B1
         #print('B(t): utilización promedio del servidor B1:',utilizacion_prom_B1)
     except ZeroDivisionError:
         utilizacion_prom_B1 = 0
     try:
         utilizacion_prom_B2 = area_estado_servidores_B[1]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['B2'] =utilizacion_prom_B2
         #print('B(t): utilización promedio del servidor B2:',utilizacion_prom_B2)
     except ZeroDivisionError:
         utilizacion_prom_B2 = 0
     try:
         utilizacion_prom_B3 = area_estado_servidores_B[2]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['B3'] = utilizacion_prom_B3
         #print('B(t): utilización promedio del servidor B3:',utilizacion_prom_B3)
     except ZeroDivisionError:
         utilizacion_prom_B3 = 0
     try:
         utilizacion_prom_B4 = area_estado_servidores_B[3]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['B4'] = utilizacion_prom_B4
         #print('B(t): utilización promedio del servidor B4:',utilizacion_prom_B4)
     except ZeroDivisionError:
         utilizacion_prom_B4 = 0
     try:
         utilizacion_prom_D1 = area_estado_servidores_D[0]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['D1'] = utilizacion_prom_D1
         #print('B(t): utilización promedio del servidor D1:',utilizacion_prom_D1)
     except ZeroDivisionError:
         utilizacion_prom_D1 = 0
     try:
         utilizacion_prom_D2 = area_estado_servidores_D[1]/tiempo_ultimo_evento
+        informes['utilizacion_servidores']['D2'] = utilizacion_prom_D2
         #print('B(t): utilización promedio del servidor D2:',utilizacion_prom_D2)
     except ZeroDivisionError:
         utilizacion_prom_D2 = 0
 
-    return demora_promedio_cola_A,demora_promedio_cola_C1,demora_promedio_cola_C2,nro_prom_clientes_cola_A,nro_prom_clientes_cola_C1,nro_prom_clientes_cola_C2,utilizacion_prom_B1,utilizacion_prom_B2,utilizacion_prom_B3,utilizacion_prom_B4,utilizacion_prom_D1,utilizacion_prom_D2
+    return informes#demora_promedio_cola_A,demora_promedio_cola_C1,demora_promedio_cola_C2,nro_prom_clientes_cola_A,nro_prom_clientes_cola_C1,nro_prom_clientes_cola_C2,utilizacion_prom_B1,utilizacion_prom_B2,utilizacion_prom_B3,utilizacion_prom_B4,utilizacion_prom_D1,utilizacion_prom_D2
 
-def programa_principal():
-    global reloj, fin_simulacion,tipo_proximo_evento
+def programa_principal_FIFO(fin_simulacion):
+    global reloj,tipo_proximo_evento
 
     inicializacion()
 
@@ -527,7 +541,7 @@ def programa_principal():
         else:
             print('Error, no hay ningún evento de ese tipo')
 
-    #return --> tupla
+    #return --> diccionario
     #0 demora_promedio_cola_A
     #1 demora_promedio_cola_C1
     #2 demora_promedio_cola_C2
@@ -542,7 +556,3 @@ def programa_principal():
     #11 utilizacion_prom_D2
 
     return informes()
-
-    #return informes
-
-#programa_principal()
