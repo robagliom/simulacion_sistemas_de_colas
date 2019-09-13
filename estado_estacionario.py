@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from caso_1.simulacion_caso_1 import programa_principal_FIFO
 from caso_2.simulacion_caso_2 import programa_principal_LIFO
@@ -229,21 +230,37 @@ def estado_estacionario(politica):
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.35)
     plt.show()
 
+    #Muestro tabla con valores
+    if len(prom_nro_prom_clientes_cola_C2)>0:
+        filas = ['Demora promedio en cola A','Demora promedio en cola C1','Demora promedio en cola C2','Número promedio de clientes en cola A','Número promedio de clientes en cola C1','Número promedio de clientes en cola C2','Utilización promedio del servidor B1','Utilización promedio del servidor B2','Utilización promedio del servidor B3','Utilización promedio del servidor B4','Utilización promedio del servidor D1','Utilización promedio del servidor D2']
+        #columna = ['Valores promedios obtenidos luego de {} corridas'.format(corridas)]
+        #resultados=[[demora_promedio_acumulada_cola_A/corridas],[demora_promedio_acumulada_cola_C1/corridas],[demora_promedio_acumulada_cola_C2/corridas],[nro_prom_acum_clientes_cola_A/corridas],[nro_prom_acum_clientes_cola_C1/corridas],[nro_prom_acum_clientes_cola_C2/corridas],[utilizacion_acum_B1/corridas],[utilizacion_acum_B2/corridas],[utilizacion_acum_B3/corridas],[utilizacion_acum_B4/corridas],[utilizacion_acum_D1/corridas],[utilizacion_acum_D2/corridas]]
+        resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,demora_promedio_acumulada_cola_C2/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,nro_prom_acum_clientes_cola_C2/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
+    else:
+        filas = ['Demora promedio en cola A','Demora promedio en cola C1','Número promedio de clientes en cola A','Número promedio de clientes en cola C1','Utilización promedio del servidor B1','Utilización promedio del servidor B2','Utilización promedio del servidor B3','Utilización promedio del servidor B4','Utilización promedio del servidor D1','Utilización promedio del servidor D2']
+        #columna = ['Valores promedios obtenidos luego de {} corridas'.format(corridas)]
+        #resultados=[[demora_promedio_acumulada_cola_A/corridas],[demora_promedio_acumulada_cola_C1/corridas],[nro_prom_acum_clientes_cola_A/corridas],[nro_prom_acum_clientes_cola_C1/corridas],[utilizacion_acum_B1/corridas],[utilizacion_acum_B2/corridas],[utilizacion_acum_B3/corridas],[utilizacion_acum_B4/corridas],[utilizacion_acum_D1/corridas],[utilizacion_acum_D2/corridas]]
+        resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
 
-    #Muestro valores
-    print('Valores promedios obtenidos luego de ',corridas,'corridas:')
-    print('Demora promedio en cola A',demora_promedio_acumulada_cola_A /corridas)
-    print('Demora promedio en cola C1',demora_promedio_acumulada_cola_C1/corridas)
-    print('Demora promedio en cola C2',demora_promedio_acumulada_cola_C2/corridas)
-    print('Número promedio de clientes en cola A',nro_prom_acum_clientes_cola_A/corridas)
-    print('Número promedio de clientes en cola C1',nro_prom_acum_clientes_cola_C1/corridas)
-    print('Número promedio de clientes en cola C2',nro_prom_acum_clientes_cola_C2/corridas)
-    print('Utilización promedio del servidor B1',utilizacion_acum_B1/corridas)
-    print('Utilización promedio del servidor B2',utilizacion_acum_B2/corridas)
-    print('Utilización promedio del servidor B3',utilizacion_acum_B3/corridas)
-    print('Utilización promedio del servidor B4',utilizacion_acum_B4/corridas)
-    print('Utilización promedio del servidor C1',utilizacion_acum_D1/corridas)
-    print('Utilización promedio del servidor C2',utilizacion_acum_D2/corridas)
+    data = {'Valores promedios obtenidos':resultados2}
+    df = pd.DataFrame(data, index=filas)
+    print(df)
+
+    """# hide axes
+    fig.patch.set_visible(False)
+    ax.axis('off')
+    ax.axis('tight')
+
+    the_table = ax.table(cellText=resultados,
+                          rowLabels=filas,
+                          colLabels=columna,
+                          colWidths=[0.4,0.6],
+                          loc='center')
+    #the_table.scale(0.5*2,1.5*13)
+    the_table.auto_set_font_size(False)
+    the_table.set_fontsize(12)
+    fig.tight_layout()
+    plt.show()"""
 
     return
 
