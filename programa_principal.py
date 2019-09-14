@@ -7,7 +7,7 @@ def main():
     que_hacer = 'Qué vamos a simular? El sistema planteado normal o el mejorado?: '
     opciones_que_hacer = ['SISTEMA NORMAL', 'SISTEMA MEJORADO', 'SALIR']
     opcion_que_hacer, index = pick(opciones_que_hacer, que_hacer)
-    print(opcion_que_hacer)
+
     if opcion_que_hacer == 'SISTEMA NORMAL':
         print(opcion_que_hacer)
         politica_cola = 'Por favor elija la política de la cola A: '
