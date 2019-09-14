@@ -6,6 +6,7 @@ from caso_1.simulacion_caso_1 import programa_principal_FIFO
 from caso_2.simulacion_caso_2 import programa_principal_LIFO
 from caso_3.simulacion_caso_3 import programa_principal_RANDOM
 from caso_4.simulacion_caso_4 import programa_principal_PRIORIDAD
+from caso_5.simulacion_caso_5 import programa_principal_COLACUNICA
 from mejora.simulacion_mejora import programa_principal_MEJORA
 
 fin_simulacion = 1000
@@ -49,7 +50,9 @@ def estado_estacionario(politica):
             informe = programa_principal_RANDOM(fin_simulacion)
         elif politica == 'PRIORIDAD':
             informe = programa_principal_PRIORIDAD(fin_simulacion)
-        elif politica == 'MEJORADO':
+        elif politica == 'FIFO CON UNA COLA C':
+            informe = programa_principal_COLACUNICA(fin_simulacion)
+        elif politica == 'MEJORA':
             informe = programa_principal_MEJORA(fin_simulacion)
         else:
             print('Error en la política')
@@ -118,7 +121,16 @@ def estado_estacionario(politica):
     plt.grid(True)
     plt.xlabel('Corridas')
     plt.ylabel('Demora')
-    if len(prom_demora_promedio_cola_C2)>0:
+    if politica == 'FIFO CON UNA COLA C':
+        #Gráfica demora promedio en cola C
+        plt.subplot(212)
+        x, y = zip(*[m for m in prom_demora_promedio_cola_C1])
+        plt.title('Demora promedio en cola C')  # Colocamos el título
+        plt.plot(x, y)
+        plt.grid(True)
+        plt.xlabel('Corridas')
+        plt.ylabel('Demora')
+    else:
         #Gráfica demora promedio en cola C1
         plt.subplot(223)
         x, y = zip(*[m for m in prom_demora_promedio_cola_C1])
@@ -135,15 +147,7 @@ def estado_estacionario(politica):
         plt.grid(True)
         plt.xlabel('Corridas')
         plt.ylabel('Demora')
-    else:
-        #Gráfica demora promedio en cola C1
-        plt.subplot(212)
-        x, y = zip(*[m for m in prom_demora_promedio_cola_C1])
-        plt.title('Demora promedio en cola C')  # Colocamos el título
-        plt.plot(x, y)
-        plt.grid(True)
-        plt.xlabel('Corridas')
-        plt.ylabel('Demora')
+
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.35)
     plt.show()
 
@@ -157,7 +161,16 @@ def estado_estacionario(politica):
     plt.grid(True)
     plt.xlabel('Corridas')
     plt.ylabel('Número')
-    if len(prom_nro_prom_clientes_cola_C2)>0:
+    if politica == 'FIFO CON UNA COLA C':
+        #Gráfica número promedio en cola C
+        plt.subplot(212)
+        x, y = zip(*[m for m in prom_nro_prom_clientes_cola_C1])
+        plt.title('Número promedio de clientes en cola C')  # Colocamos el título
+        plt.plot(x, y)
+        plt.grid(True)
+        plt.xlabel('Corridas')
+        plt.ylabel('Número')
+    else:
         #Gráfica número promedio en cola C1
         plt.subplot(223)
         x, y = zip(*[m for m in prom_nro_prom_clientes_cola_C1])
@@ -174,53 +187,55 @@ def estado_estacionario(politica):
         plt.grid(True)
         plt.xlabel('Corridas')
         plt.ylabel('Número')
-    else:
-        #Gráfica número promedio en cola C
-        plt.subplot(212)
-        x, y = zip(*[m for m in prom_nro_prom_clientes_cola_C1])
-        plt.title('Número promedio de clientes en cola C')  # Colocamos el título
-        plt.plot(x, y)
-        plt.grid(True)
-        plt.xlabel('Corridas')
-        plt.ylabel('Número')
+
 
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.35)
     plt.show()
 
     #Utilización promedio servidores B
     plt.figure(3)
-    #Gráfica Utilización promedio servidor B1
-    plt.subplot(221)
-    x, y = zip(*[m for m in prom_utilizacion_B1])
-    plt.plot(x, y)
-    plt.title('Utilización promedio servidor B1')  # Colocamos el título
-    plt.grid(True)
-    plt.xlabel('Corridas')
-    plt.ylabel('Utilización')
-    #Gráfica Utilización promedio servidor B2
-    plt.subplot(222)
-    x, y = zip(*[m for m in prom_utilizacion_B2])
-    plt.plot(x, y)
-    plt.title('Utilización promedio servidor B2')  # Colocamos el título
-    plt.grid(True)
-    plt.xlabel('Corridas')
-    plt.ylabel('Utilización')
-    #Gráfica Utilización promedio servidor B3
-    plt.subplot(223)
-    x, y = zip(*[m for m in prom_utilizacion_B3])
-    plt.title('Utilización promedio servidor B3')  # Colocamos el título
-    plt.plot(x, y)
-    plt.grid(True)
-    plt.xlabel('Corridas')
-    plt.ylabel('Utilización')
-    #Gráfica Utilización promedio servidor B4
-    plt.subplot(224)
-    x, y = zip(*[m for m in prom_utilizacion_B4])
-    plt.title('Utilización promedio servidor B4')  # Colocamos el título
-    plt.plot(x, y)
-    plt.grid(True)
-    plt.xlabel('Corridas')
-    plt.ylabel('Utilización')
+    if politica == 'MEJORA':
+        #Gráfica Utilización promedio servidor B1
+        plt.subplot(111)
+        x, y = zip(*[m for m in prom_utilizacion_B1])
+        plt.plot(x, y)
+        plt.title('Utilización promedio servidor B')  # Colocamos el título
+        plt.grid(True)
+        plt.xlabel('Corridas')
+        plt.ylabel('Utilización')
+    else:
+        #Gráfica Utilización promedio servidor B1
+        plt.subplot(221)
+        x, y = zip(*[m for m in prom_utilizacion_B1])
+        plt.plot(x, y)
+        plt.title('Utilización promedio servidor B1')  # Colocamos el título
+        plt.grid(True)
+        plt.xlabel('Corridas')
+        plt.ylabel('Utilización')
+        #Gráfica Utilización promedio servidor B2
+        plt.subplot(222)
+        x, y = zip(*[m for m in prom_utilizacion_B2])
+        plt.plot(x, y)
+        plt.title('Utilización promedio servidor B2')  # Colocamos el título
+        plt.grid(True)
+        plt.xlabel('Corridas')
+        plt.ylabel('Utilización')
+        #Gráfica Utilización promedio servidor B3
+        plt.subplot(223)
+        x, y = zip(*[m for m in prom_utilizacion_B3])
+        plt.title('Utilización promedio servidor B3')  # Colocamos el título
+        plt.plot(x, y)
+        plt.grid(True)
+        plt.xlabel('Corridas')
+        plt.ylabel('Utilización')
+        #Gráfica Utilización promedio servidor B4
+        plt.subplot(224)
+        x, y = zip(*[m for m in prom_utilizacion_B4])
+        plt.title('Utilización promedio servidor B4')  # Colocamos el título
+        plt.plot(x, y)
+        plt.grid(True)
+        plt.xlabel('Corridas')
+        plt.ylabel('Utilización')
 
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.35)
     plt.show()
@@ -248,16 +263,20 @@ def estado_estacionario(politica):
     plt.show()
 
     #Muestro tabla con valores
-    if len(prom_nro_prom_clientes_cola_C2)>0:
-        filas = ['Demora promedio en cola A','Demora promedio en cola C1','Demora promedio en cola C2','Número promedio de clientes en cola A','Número promedio de clientes en cola C1','Número promedio de clientes en cola C2','Utilización promedio del servidor B1','Utilización promedio del servidor B2','Utilización promedio del servidor B3','Utilización promedio del servidor B4','Utilización promedio del servidor D1','Utilización promedio del servidor D2']
+    if politica == 'MEJORA':
+        filas = ['Demora promedio en cola A','Demora promedio en cola C1','Demora promedio en cola C2','Número promedio de clientes en cola A','Número promedio de clientes en cola C1','Número promedio de clientes en cola C2','Utilización promedio del servidor B','Utilización promedio del servidor D1','Utilización promedio del servidor D2']
         columna = ['Valores promedios obtenidos luego de {} corridas'.format(corridas)]
-        resultados=[[demora_promedio_acumulada_cola_A/corridas],[demora_promedio_acumulada_cola_C1/corridas],[demora_promedio_acumulada_cola_C2/corridas],[nro_prom_acum_clientes_cola_A/corridas],[nro_prom_acum_clientes_cola_C1/corridas],[nro_prom_acum_clientes_cola_C2/corridas],[utilizacion_acum_B1/corridas],[utilizacion_acum_B2/corridas],[utilizacion_acum_B3/corridas],[utilizacion_acum_B4/corridas],[utilizacion_acum_D1/corridas],[utilizacion_acum_D2/corridas]]
-        #resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,demora_promedio_acumulada_cola_C2/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,nro_prom_acum_clientes_cola_C2/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
-    else:
+        resultados=[[demora_promedio_acumulada_cola_A/corridas],[demora_promedio_acumulada_cola_C1/corridas],[demora_promedio_acumulada_cola_C2/corridas],[nro_prom_acum_clientes_cola_A/corridas],[nro_prom_acum_clientes_cola_C1/corridas],[nro_prom_acum_clientes_cola_C2/corridas],[utilizacion_acum_B1/corridas],[utilizacion_acum_D1/corridas],[utilizacion_acum_D2/corridas]]
+    elif politica == 'FIFO CON UNA COLA C':
         filas = ['Demora promedio en cola A','Demora promedio en cola C','Número promedio de clientes en cola A','Número promedio de clientes en cola C','Utilización promedio del servidor B1','Utilización promedio del servidor B2','Utilización promedio del servidor B3','Utilización promedio del servidor B4','Utilización promedio del servidor D1','Utilización promedio del servidor D2']
         columna = ['Valores promedios obtenidos luego de {} corridas'.format(corridas)]
         resultados=[[demora_promedio_acumulada_cola_A/corridas],[demora_promedio_acumulada_cola_C1/corridas],[nro_prom_acum_clientes_cola_A/corridas],[nro_prom_acum_clientes_cola_C1/corridas],[utilizacion_acum_B1/corridas],[utilizacion_acum_B2/corridas],[utilizacion_acum_B3/corridas],[utilizacion_acum_B4/corridas],[utilizacion_acum_D1/corridas],[utilizacion_acum_D2/corridas]]
         #resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
+    else:
+        filas = ['Demora promedio en cola A','Demora promedio en cola C1','Demora promedio en cola C2','Número promedio de clientes en cola A','Número promedio de clientes en cola C1','Número promedio de clientes en cola C2','Utilización promedio del servidor B1','Utilización promedio del servidor B2','Utilización promedio del servidor B3','Utilización promedio del servidor B4','Utilización promedio del servidor D1','Utilización promedio del servidor D2']
+        columna = ['Valores promedios obtenidos luego de {} corridas'.format(corridas)]
+        resultados=[[demora_promedio_acumulada_cola_A/corridas],[demora_promedio_acumulada_cola_C1/corridas],[demora_promedio_acumulada_cola_C2/corridas],[nro_prom_acum_clientes_cola_A/corridas],[nro_prom_acum_clientes_cola_C1/corridas],[nro_prom_acum_clientes_cola_C2/corridas],[utilizacion_acum_B1/corridas],[utilizacion_acum_B2/corridas],[utilizacion_acum_B3/corridas],[utilizacion_acum_B4/corridas],[utilizacion_acum_D1/corridas],[utilizacion_acum_D2/corridas]]
+        #resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,demora_promedio_acumulada_cola_C2/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,nro_prom_acum_clientes_cola_C2/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
 
     #data = {'Valores promedios obtenidos':resultados2}
     #df = pd.DataFrame(data, index=filas)

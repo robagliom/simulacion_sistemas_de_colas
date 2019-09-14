@@ -11,16 +11,16 @@ def main():
     if opcion_que_hacer == 'SISTEMA NORMAL':
         print(opcion_que_hacer)
         politica_cola = 'Por favor elija la política de la cola A: '
-        politicas = ['FIFO', 'LIFO', 'RANDOM', 'PRIORIDAD','X VOLVER']
+        politicas = ['FIFO', 'LIFO', 'RANDOM', 'PRIORIDAD','FIFO CON UNA COLA C','X VOLVER']
         politica, index = pick(politicas, politica_cola)
         print('Política',politica)
-        if politica == 'VOLVER':
+        if politica == 'X VOLVER':
             main()
         else:
             estado_estacionario(politica)
     elif opcion_que_hacer == 'SISTEMA MEJORADO':
         print(opcion_que_hacer)
-        estado_estacionario('MEJORADO')
+        estado_estacionario('MEJORA')
     else:
         sys.exit()
         #return
