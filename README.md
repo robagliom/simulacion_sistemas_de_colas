@@ -1,5 +1,10 @@
 <h3>Simulación sistema de colas de bajo nivel</h3>
 
+<h4>Programa principal: <i>programa_principal.py</i></h4>
+
+<h5>Bosquejo del sistema de colas</h5>
+<img src="sistema_de_colas.png"/>
+
 <h5>Medidas de rendimiento a calcular:</h5>
 <p>* Utilización de los servidores.</p>
 <p>* Demora promedio en cola.</p>
@@ -13,5 +18,3 @@
 
 <h5>Mejora:</h5>
 <p>Caso 5: Caso 1) + Cola nivel dos pasa a ser nivel 1 con FIFO</p>
-
-<h4>Programa principal: programa_principal.py</h4>
