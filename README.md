@@ -18,3 +18,6 @@
 
 <h5>Mejora:</h5>
 <p>Caso 5: Caso 1) + Cola nivel dos pasa a ser nivel 1 con FIFO</p>
+
+<h5>Requerimientos:</h5>
+<p>https://github.com/robagliom/simulacion_sistemas_de_colas/blob/master/requeriments.txt</p>
