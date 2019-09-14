@@ -252,16 +252,16 @@ def estado_estacionario(politica):
         filas = ['Demora promedio en cola A','Demora promedio en cola C1','Demora promedio en cola C2','Número promedio de clientes en cola A','Número promedio de clientes en cola C1','Número promedio de clientes en cola C2','Utilización promedio del servidor B1','Utilización promedio del servidor B2','Utilización promedio del servidor B3','Utilización promedio del servidor B4','Utilización promedio del servidor D1','Utilización promedio del servidor D2']
         columna = ['Valores promedios obtenidos luego de {} corridas'.format(corridas)]
         resultados=[[demora_promedio_acumulada_cola_A/corridas],[demora_promedio_acumulada_cola_C1/corridas],[demora_promedio_acumulada_cola_C2/corridas],[nro_prom_acum_clientes_cola_A/corridas],[nro_prom_acum_clientes_cola_C1/corridas],[nro_prom_acum_clientes_cola_C2/corridas],[utilizacion_acum_B1/corridas],[utilizacion_acum_B2/corridas],[utilizacion_acum_B3/corridas],[utilizacion_acum_B4/corridas],[utilizacion_acum_D1/corridas],[utilizacion_acum_D2/corridas]]
-        resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,demora_promedio_acumulada_cola_C2/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,nro_prom_acum_clientes_cola_C2/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
+        #resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,demora_promedio_acumulada_cola_C2/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,nro_prom_acum_clientes_cola_C2/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
     else:
         filas = ['Demora promedio en cola A','Demora promedio en cola C','Número promedio de clientes en cola A','Número promedio de clientes en cola C','Utilización promedio del servidor B1','Utilización promedio del servidor B2','Utilización promedio del servidor B3','Utilización promedio del servidor B4','Utilización promedio del servidor D1','Utilización promedio del servidor D2']
         columna = ['Valores promedios obtenidos luego de {} corridas'.format(corridas)]
         resultados=[[demora_promedio_acumulada_cola_A/corridas],[demora_promedio_acumulada_cola_C1/corridas],[nro_prom_acum_clientes_cola_A/corridas],[nro_prom_acum_clientes_cola_C1/corridas],[utilizacion_acum_B1/corridas],[utilizacion_acum_B2/corridas],[utilizacion_acum_B3/corridas],[utilizacion_acum_B4/corridas],[utilizacion_acum_D1/corridas],[utilizacion_acum_D2/corridas]]
-        resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
+        #resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
 
-    data = {'Valores promedios obtenidos':resultados2}
-    df = pd.DataFrame(data, index=filas)
-    print(df)
+    #data = {'Valores promedios obtenidos':resultados2}
+    #df = pd.DataFrame(data, index=filas)
+    #print(df)
 
     fig, ax = plt.subplots()
     # hide axes
@@ -280,6 +280,8 @@ def estado_estacionario(politica):
     fig.tight_layout()
     plt.show()
 
-    return
+    from programa_principal import main
+
+    return main()
 
 #estado_estacionario('FIFO')
