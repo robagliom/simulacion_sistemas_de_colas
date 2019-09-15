@@ -149,7 +149,8 @@ def estado_estacionario(politica):
         plt.ylabel('Demora')
 
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.35)
-    plt.show()
+    #plt.show()
+    plt.savefig('resultados/demora_promedio_{}.svg'.format(politica))
 
     #Número promedio de clientes en cola
     plt.figure(2)
@@ -188,9 +189,9 @@ def estado_estacionario(politica):
         plt.xlabel('Corridas')
         plt.ylabel('Número')
 
-
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.35)
-    plt.show()
+    #plt.show()
+    plt.savefig('resultados/nro_clientes_promedio_{}.svg'.format(politica))
 
     #Utilización promedio servidores B
     plt.figure(3)
@@ -238,7 +239,8 @@ def estado_estacionario(politica):
         plt.ylabel('Utilización')
 
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.35)
-    plt.show()
+    #plt.show()
+    plt.savefig('resultados/utilizacion_sB_{}.svg'.format(politica))
 
     #Utilización promedio servidores D
     plt.figure(4)
@@ -260,7 +262,8 @@ def estado_estacionario(politica):
     plt.ylabel('Utilización')
 
     plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.35)
-    plt.show()
+    #plt.show()
+    plt.savefig('resultados/utilizacion_sD_{}.svg'.format(politica))
 
     #Muestro tabla con valores
     if politica == 'MEJORA':
@@ -278,6 +281,9 @@ def estado_estacionario(politica):
         resultados=[[demora_promedio_acumulada_cola_A/corridas],[demora_promedio_acumulada_cola_C1/corridas],[demora_promedio_acumulada_cola_C2/corridas],[nro_prom_acum_clientes_cola_A/corridas],[nro_prom_acum_clientes_cola_C1/corridas],[nro_prom_acum_clientes_cola_C2/corridas],[utilizacion_acum_B1/corridas],[utilizacion_acum_B2/corridas],[utilizacion_acum_B3/corridas],[utilizacion_acum_B4/corridas],[utilizacion_acum_D1/corridas],[utilizacion_acum_D2/corridas]]
         #resultados2=[demora_promedio_acumulada_cola_A/corridas,demora_promedio_acumulada_cola_C1/corridas,demora_promedio_acumulada_cola_C2/corridas,nro_prom_acum_clientes_cola_A/corridas,nro_prom_acum_clientes_cola_C1/corridas,nro_prom_acum_clientes_cola_C2/corridas,utilizacion_acum_B1/corridas,utilizacion_acum_B2/corridas,utilizacion_acum_B3/corridas,utilizacion_acum_B4/corridas,utilizacion_acum_D1/corridas,utilizacion_acum_D2/corridas]
 
+    f = open('resultados/tabla_resultados_{}.txt'.format(politica),'w')
+    f.write(str(resultados))
+    f.close()
     #data = {'Valores promedios obtenidos':resultados2}
     #df = pd.DataFrame(data, index=filas)
     #print(df)
