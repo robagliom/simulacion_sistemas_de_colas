@@ -154,7 +154,7 @@ def arribo_B():
     #print('arribo B',reloj)
     #Un arribo genera un arribo
     prox_arribo_B = reloj + np.random.exponential(tiempo_medio_e_arribos_cola_A) #generamos próximo arribo
-    #Veo si hay algún servidor B libre
+    #Vemos si hay algún servidor B libre
     servidores_libres = []
     for e in range(len(estado_servidores_B)):
         #Vemos qué servidores están libres
@@ -182,12 +182,14 @@ def arribo_B():
         tiempo_ultimo_evento = reloj
 
     else:
+        #Actualizamos área debajo de la función número de clientes en cola
+        area_num_clientes_cola_A += num_clientes_cola_A*(reloj-tiempo_ultimo_evento)
+
         tiempo_ultimo_evento = reloj
         #Todos los servidores están ocupados, se agrega a la cola
         num_clientes_cola_A += 1 #sumamos 1 al número de clientes en cola A
         cola_A.append(tiempo_ultimo_evento) #guardamos el tiempo de arribo del cliente
-        #Actualizamos área debajo de la función número de clientes en cola
-        area_num_clientes_cola_A += num_clientes_cola_A*(reloj-tiempo_ultimo_evento)
+
     return
 
 def partida_B():
@@ -195,7 +197,7 @@ def partida_B():
     #print('partida B',reloj)
     #Identificamos servidor que se va a desocupar
     servidor = 0
-    #Recorro arreglo que tiene las próximas partidas de B
+    #Recorremos arreglo que tiene las próximas partidas de B
     for i in range(len(prox_partidas_B)):
         #Comparo el tiempo actual con cada partida
         if prox_partidas_B[i] == reloj:
